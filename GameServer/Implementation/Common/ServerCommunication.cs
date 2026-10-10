@@ -578,7 +578,8 @@ namespace GameServer.Implementation.Common
             var output = payload.AsSpan(EncryptedHeaderSize, contents.Length);
             
             RandomNumberGenerator.Fill(nonce);
-            Aes.Encrypt(nonce, contents, output, tag);
+            lock (Aes)
+                Aes.Encrypt(nonce, contents, output, tag); // testing to see if it fixes Bombd cryptographic errors
             return payload;
         }
 
@@ -589,7 +590,8 @@ namespace GameServer.Implementation.Common
             ReadOnlySpan<byte> data = message.Slice(EncryptedHeaderSize, message.Length - EncryptedHeaderSize);
 
             byte[] output = new byte[data.Length];
-            Aes.Decrypt(nonce, data, tag, output);
+            lock (Aes)
+                Aes.Decrypt(nonce, data, tag, output); // testing to see if it fixes Bombd cryptographic errors
             return Encoding.UTF8.GetString(output);
         }
 

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using GameServer.Models.PlayerData;
 using GameServer.Utils;
 
 namespace GameServer.Controllers.Api
@@ -65,29 +63,6 @@ namespace GameServer.Controllers.Api
                 .ToList();
 
             return Json(new { total, presence });
-        }
-
-        [HttpGet]
-        [Route("/api/playercounts/presence/count")]
-        public IActionResult GetPresenceCount()
-        {
-            var grouped = database.Sessions
-                .Where(x => x.LastPing.AddMinutes(1) > TimeUtils.Now)
-                .GroupBy(x => x.Presence)
-                .Select(g => new { presence = g.Key, count = g.Count() })
-                .ToList();
-
-            var presences = Enum.GetValues<Presence>()
-                .Where(p => p != Presence.OFFLINE)
-                .ToDictionary(
-                    p => p.ToString(),
-                    p => grouped.FirstOrDefault(g => g.presence == p)?.count ?? 0);
-
-            return Json(new
-            {
-                total = presences.Values.Sum(),
-                presences
-            });
         }
 
         [HttpGet]

@@ -480,7 +480,7 @@ namespace GameServer.Implementation.Player_Creation
                     race.StartedAt <= firstRace.AddSeconds(10)); // this is being generous in case of weird emulator quirks
 
                 if (wasInFirstRace)
-                    racesStarted = 0;
+                    racesStarted = 0; // temporarily send this in the response to trigger the achivement, while not permanently altering anything in the db
             }
 
             var resp = new Response<List<player_creation>>

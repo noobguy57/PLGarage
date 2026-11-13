@@ -173,7 +173,7 @@ namespace GameServer.Controllers.Common
                 });
             }
             
-            if (game.game_type == GameType.ONLINE_HOT_SEAT_RACE)
+            if (game.game_type == GameType.ONLINE_HOT_SEAT_RACE && score == null)
             {
                 database.PlayerCreationRacesStarted.Add(new PlayerCreationRaceStarted { PlayerCreationId = game.track_idx, StartedAt = TimeUtils.Now });
                 Track.RacesFinished++;

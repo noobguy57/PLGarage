@@ -1,21 +1,26 @@
-﻿using System.Collections.Generic;
-using GameServer.Models;
-using GameServer.Models.Response;
+﻿using GameServer.Implementation.Common;
+using GameServer.Implementation.Player;
+using GameServer.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameServer.Controllers.Player
 {
-    public class AchievementsController : Controller
+    public class AchievementsController(Database database) : Controller
     {
+        [Authorize]
+        [AllowAnonymous]
         [Route("achievements.xml")]
-        public IActionResult Get()
+        public IActionResult Get(int page = 1, int per_page = 50)
         {
-            var resp = new Response<List<Achievements>>
-            {
-                status = new ResponseStatus { id = 0, message = "Successful completion" },
-                response = [new Achievements { total = 0, AchievementList = [] }]
-            };
-            return Content(resp.Serialize(), "application/xml;charset=utf-8");
+            var session = Session.GetSession(database, User);
+            return Content(Alerts.GetAlerts(database, session, page, per_page), "application/xml;charset=utf-8");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            database.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

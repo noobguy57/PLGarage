@@ -1,4 +1,5 @@
 ﻿using GameServer.Implementation.Common;
+using GameServer.Implementation.Player;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -28,6 +29,19 @@ namespace GameServer.Utils
             try
             {
                 using var database = Database.GetContext();
+
+                try
+                {
+                    var hotlap = ContentUpdates.ReadHotlapData();
+                    if (hotlap != null && hotlap.TrackId > 0)
+                        AlertTriggers.AwardHotLap(database, hotlap.TrackId);
+                }
+                catch (Exception e)
+                {
+                    Logger.LogError(e, "There was an error trying to reward the hot lap:");
+                    database.ChangeTracker.Clear();
+                }
+
                 ContentUpdates.GetNewHotLap(database);
             }
             catch (Exception e)

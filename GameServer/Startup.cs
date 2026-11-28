@@ -65,6 +65,7 @@ namespace GameServer
                 .UseProjectables().UseLinqToDB());
             
             services.AddHostedService<DailyTickService>();
+            services.AddHostedService<AlertService>();
 
             IUGCStorage storage = UserGeneratedContentUtils.GetStorage(ServerConfig.Instance.Storage.Type);
             

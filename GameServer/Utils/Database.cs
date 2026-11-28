@@ -40,6 +40,7 @@ namespace GameServer.Utils
         public DbSet<PlayerPoint> PlayerPoints { get; set; }
         public DbSet<PlayerExperiencePoint> PlayerExperiencePoints { get; set; }
         public DbSet<MailMessageData> MailMessages { get; set; }
+        public DbSet<PlayerAchievement> PlayerAchievements { get; set; }
         public DbSet<PlayerComplaintData> PlayerComplaints { get; set; }
         public DbSet<PlayerCreationComplaintData> PlayerCreationComplaints { get; set; }
         public DbSet<AnnouncementData> Announcements { get; set; }
